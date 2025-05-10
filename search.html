@@ -1,0 +1,21 @@
+<h2>Search Products</h2>
+
+<input type="text" id="searchInput" placeholder="Search Products...">
+<ul id="results"></ul>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const query = this.value;
+        fetch('search.php?q=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                const resultList = document.getElementById('results');
+                resultList.innerHTML = '';
+                data.forEach(product => {
+                    const li = document.createElement('li');
+                    li.textContent = product.name + ' - $' + product.price;
+                    resultList.appendChild('li');
+                });
+            })
+    })
+</script>

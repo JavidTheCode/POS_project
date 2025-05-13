@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require_once 'db.php';
+require_once 'db/config.php';
+require_once 'db/db.php';
 
 $term = $_GET['q'] ?? '';
 $stmt = $conn->prepare("SELECT * FROM  products WHERE name LIKE ?");

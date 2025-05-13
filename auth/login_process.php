@@ -15,7 +15,7 @@ $result = $stmt->get_result();
 if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
 
-    if (sha1($password) == $user['password']) {
+    if ($password == $user['password']) {
         $_SESSION['username'] = $user['username'];
         header("Location: ../dashboard.php");
         exit();

@@ -97,6 +97,7 @@ while ($row = $result->fetch_assoc()) {
 
 <body>
     <?php require_once 'sidebar.php'; ?>
+    
 
     <div class="dashboard-container">
         <div class="header">
@@ -109,7 +110,11 @@ while ($row = $result->fetch_assoc()) {
                 <div class="card">
                     <h3><?= htmlspecialchars($product['name']) ?></h3>
                     <p class="price">$<?= number_format($product['price'], 2) ?></p>
-                    <button>Add to Cart</button>
+                    <form method="POST" action="cart.php">
+                        <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+
                 </div>
             <?php endforeach; ?>
         </div>

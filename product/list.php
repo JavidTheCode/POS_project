@@ -63,7 +63,6 @@ $result = $conn->query("SELECT * FROM products");
                 <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
-                <th>Stock</th>
                 <th>Actions</th>
             </tr>
 
@@ -71,8 +70,7 @@ $result = $conn->query("SELECT * FROM products");
                 <tr>
                     <td><?= $row['id'] ?></td>
                     <td><?= htmlspecialchars($row['name']) ?></td>
-                    <td>$<?= number_format($row['price'], 2) ?></td>
-                    <td><?= $row['stock'] ?></td>
+                    <td>$<?= number_format($row['price'], 2) ?></td>                   
                     <td>
                         <a href="edit.php?id=<?= $row['id'] ?>">Edit</a> |
                         <a href="delete.php?id=<?= $row['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
@@ -81,8 +79,7 @@ $result = $conn->query("SELECT * FROM products");
             <?php endwhile; ?>
         </table>
 
-        <br>
-        <a href="../dashboard.php">← Back to Dashboard</a>
+  
     </div>
 
 </body>

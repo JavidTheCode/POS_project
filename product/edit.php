@@ -11,10 +11,8 @@ $product = $stmt->get_result()->fetch_assoc();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $price = $_POST['price'];
-    $stock = $_POST['stock'];
-
-    $stmt = $conn->prepare("UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?");
-    $stmt->bind_param('sdii', $name, $price, $stock, $id);
+    $stmt = $conn->prepare("UPDATE products SET name = ?, price = ? WHERE id = ?");
+    $stmt->bind_param('sdi', $name, $price, $id);
     if ($stmt->execute()) {
         header("Location: list.php");
         exit();
@@ -113,9 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <label>Price:</label>
                 <input type="number" step="0.01" name="price" value="<?= $product['price'] ?>" required>
-
-                <label>Stock:</label>
-                <input type="number" name="stock" value="<?= $product['stock'] ?>">
 
                 <button type="submit">Update Product</button>
             </form>

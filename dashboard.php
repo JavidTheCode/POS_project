@@ -8,6 +8,14 @@ if (!isset($_SESSION['username'])) {
 
 $totalOrders = $conn->query("SELECT COUNT(*) as total FROM orders")->fetch_assoc()['total'];
 $totalRevenue = $conn->query("SELECT SUM(total_amount) as total FROM orders")->fetch_assoc()['total'];
+
+$recentOrders = $conn->query("
+    SELECT o.id, o.total_amount, o.created_at, c.name AS customer_name
+    FROM orders o
+    LEFT JOIN customers c ON o.customer_id = c.id
+    ORDER BY o.created_at DESC
+    LIMIT 5
+");
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +26,6 @@ $totalRevenue = $conn->query("SELECT SUM(total_amount) as total FROM orders")->f
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="style/sidebar.css">
-    <link rel="stylesheet" href="style/dashboard.css">
     <style>
         .dashboard-container {
             margin-left: 220px;
@@ -72,6 +79,36 @@ $totalRevenue = $conn->query("SELECT SUM(total_amount) as total FROM orders")->f
             font-weight: bold;
             color: #27ae60;
         }
+
+        .recent-orders {
+            margin-top: 40px;
+        }
+
+        .recent-orders h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .recent-orders table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .recent-orders th,
+        .recent-orders td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .recent-orders th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -93,9 +130,30 @@ $totalRevenue = $conn->query("SELECT SUM(total_amount) as total FROM orders")->f
             </div>
         </div>
 
-
+        <div class="recent-orders">
+            <h3>Last 5 Orders</h3>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Date</th>
+                </tr>
+                <?php if ($recentOrders->num_rows > 0): ?>
+                    <?php while($order = $recentOrders->fetch_assoc()): ?>
+                        <tr>
+                            <td><?= $order['id'] ?></td>
+                            <td><?= $order['customer_name'] ?? 'N/A' ?></td>
+                            <td>$<?= number_format($order['total_amount'], 2) ?></td>
+                            <td><?= date("d M Y H:i", strtotime($order['created_at'])) ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr><td colspan="4">No recent orders.</td></tr>
+                <?php endif; ?>
+            </table>
+        </div>
     </div>
-
 </body>
 
 </html>
